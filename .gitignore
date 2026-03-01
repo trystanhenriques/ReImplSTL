@@ -1,0 +1,7 @@
+/.vs
+/ReImplSTL/x64
+*.sln
+/x64
+*.vcxproj
+*.filters
+*.user
