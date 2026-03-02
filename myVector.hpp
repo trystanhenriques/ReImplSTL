@@ -4,6 +4,7 @@
 #include <memory>
 #include <initializer_list>
 #include <algorithm>
+#include <cassert>
 
 template<typename T>
 class myVector
@@ -30,7 +31,7 @@ public:
 	}
 	
 	// Constructor with intitializer list
-	myVector(const std::initializer_list<value_type>& list)
+	myVector(std::initializer_list<value_type> list)
 	: myVector( static_cast<int>(list.size()*2) )	// delegate to other constructor
 	{
 		std::copy(list.begin(), list.end(), m_data); // Copy the list into the array
@@ -47,6 +48,21 @@ public:
 		
 		m_length = vecCopy.m_length;
 		m_capacity = vecCopy.m_capacity;
+	}
+	
+	// Move Constructor
+	myVector(myVector&& vecMove) 
+	{
+		m_data = vecMove.m_data;	// point to the data
+
+		// set size and capacity
+		m_length =  vecMove.m_length;
+		m_capacity = vecMove.m_capacity;
+
+		// zero out the other vector
+		vecMove.m_data = nullptr;
+		vecMove.m_capacity = 0;
+		vecMove.m_length = 0;
 	}
 
 	~myVector()
@@ -79,7 +95,7 @@ public:
 	}
 
 	// Overload the assignment operator for deep copying initializer lists
-	myVector& operator=(const std::initializer_list<value_type>& list)
+	myVector& operator=(std::initializer_list<value_type> list)
 	{	
 		std::size_t capacity{ list.size() * 2 };
 
@@ -98,7 +114,94 @@ public:
 		// for chaining
 		return *this;
 	}
+	
+	// non-const overload of operator[] for element access
+	reference operator[](int index)
+	{
+		// make sure the index is in bounds
+		assert( (index >= 0 && index < m_length) , "Index Out of Bounds" );
+		
+		// Return Element at that index
+		return m_data[static_cast<std::size_t>(index)];
 
+	}
+	
+	// const overload of operator[] for element access
+	const_reference operator[](int index) const
+	{
+		// make sure the index is in bounds
+		assert(index >= 0 && index < m_length, "Index Out of Bounds");
+
+		// Return Element at that index
+		return m_data[static_cast<std::size_t>(index)];
+	}
+	
+	//  ======================
+	//  Capacity
+	//  ======================
+
+	int size() const
+	{
+		return (static_cast<int>(m_length));
+	}
+	
+	bool empty() const
+	{
+		return (m_length > 0);
+	}
+
+	int capacity() const
+	{
+		return (static_cast<int>(m_capacity));
+	}
+
+	void reserve(int newCapacity)
+	{
+		// Check whether current capacity is greater than the new capacity. If so, return
+		if (m_capacity >= newCapacity)
+			return;
+		
+		// allocate new memory
+		value_type* tempData { new value_type[static_cast<std::size_t>(newCapacity)] {} };
+
+		// move the old data into the new data
+		for (size_type i{}; i < m_length; i++) {
+			tempData[i] = std::move(m_data[i]);
+		}
+		
+		// deallocate old data
+		delete[] m_data;
+		
+		// point to the new Data
+		m_data = tempData;
+		
+		// set new capacity
+		m_capacity = newCapacity;
+
+	}
+		
+	void shrink_to_fit()
+	{
+		// Allocate new memory the size of our length
+		value_type* tempData { new value_type[static_cast<std::size_t>(m_length)] };
+		
+		// move the old data into the new data
+		for (size_type i{}; i < m_length; i++) {
+			tempData[i] = std::move(m_data[i]);
+		}
+		
+		// deallocate old data
+		delete[] m_data;
+
+		// point to the new Data
+		m_data = tempData;
+	
+		m_capacity = m_length;
+
+	}
+
+	
+	
 
 
 private:
