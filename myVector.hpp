@@ -80,17 +80,21 @@ public:
 		if (this == &vecCopy)
 			return *this;
 
-		// deallocate old memory
-		delete[] m_data;
+		// Check if the length of the copy is greater than the capacity
+		if (vecCopy.m_length > m_capacity) {
+			
+			// deallocate old memory
+			delete[] m_data;
 
-		// allocate new memory 
-		m_data = new value_type[ static_cast<std::size_t>(vecCopy.m_capacity) ] {};
-		
+			// allocate new memory with the same capacity of the copy
+			m_data = new value_type[static_cast<std::size_t>(vecCopy.m_capacity)]{};
+		}
+
 		// deep copy data
 		std::copy_n(vecCopy.m_data, static_cast<int>(vecCopy.m_length), m_data);
 
 		m_length = vecCopy.m_length;
-		m_capacity = vecCopy.m_length;
+		m_capacity = vecCopy.m_capacity;
 		
 		// for chaining
 		return *this;
@@ -117,6 +121,21 @@ public:
 		// for chaining
 		return *this;
 	}
+
+	//// Overload the assignment operator for moving r values
+	//vector& operator=(vector&& rvec)
+	//{	
+	//	// check for self assignment
+	//	if (this == &vecCopy)
+	//		return *this;
+
+	//	// Check if the rvec has a higher length than the capacity
+	//	if (rvec.m_length >= m_capacity) {
+	//		// We need more memory, allocate new memory equal to the 
+	//		
+
+	//	}
+	//}
 	
 	// non-const overload of operator[] for element access
 	reference operator[](int index)
@@ -198,12 +217,28 @@ public:
 
 		// point to the new Data
 		m_data = tempData;
-	
+		
+		// set new capacity
 		m_capacity = m_length;
 
 	}
 
 	
+	void push_back(const_reference element)
+	{
+		// check the capacity
+		if (m_length == m_capacity) {
+
+			// Allocate more memory with double the size
+			double_capacity();
+		}
+	
+		// copy the element into the new slot
+		m_data[m_length];
+		
+		// Increment the length
+		m_lenght++;
+	}
 	
 
 
@@ -211,7 +246,31 @@ private:
 	value_type* m_data{};
 	size_type m_length{};
 	size_type m_capacity{};
+	
+	// ======================
+	// Helpers
+	// ======================
 
+	// Case where the vector runs out of memory and we need to allocate more memory
+	void double_capacity()
+	{
+		// New capacity
+		size_type newCapacity {m_capacity * 2};
+		
+		// allocate double the memory of our past capacity
+		value_type* tempData { new value_type[static_cast<std::size_t(newCapacity)] {} };
+
+		// Move / Copy the data over to our newly allocated memory
+		for (size_type i{}; i < m_length; i++) {
+			tempData[i] = std::move(m_data[i]);
+		}
+
+		// Point to our new data
+		m_data = tempData;
+		
+		// Set new capacity
+		m_capacity = newCapacity;
+	}
 };
 
 } // namespace ReImplSTL
