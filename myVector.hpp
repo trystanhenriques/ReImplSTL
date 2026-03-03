@@ -6,8 +6,11 @@
 #include <algorithm>
 #include <cassert>
 
+namespace ReImplSTL
+{
+
 template<typename T>
-class myVector
+class vector
 {
 public:
 	using value_type = T;
@@ -17,13 +20,13 @@ public:
 	using const_reference = const value_type&;
 
 	// Constructors
-	myVector()
+	vector()
 	: m_data{ new value_type[10] {} }, m_length{0}, m_capacity{10}	// default size of 10
 	{	
 	}
 	
 	// Constructor with initial size
-	myVector(int size)
+	vector(int size)
 	: m_data{ new value_type[static_cast<std::size_t>(size)] {} },
 	  m_length{0}, 
 	  m_capacity{static_cast<size_type>(size)}
@@ -31,15 +34,15 @@ public:
 	}
 	
 	// Constructor with intitializer list
-	myVector(std::initializer_list<value_type> list)
-	: myVector( static_cast<int>(list.size()*2) )	// delegate to other constructor
+	vector(std::initializer_list<value_type> list)
+	: vector( static_cast<int>(list.size()*2) )	// delegate to other constructor
 	{
 		std::copy(list.begin(), list.end(), m_data); // Copy the list into the array
 		m_length = static_cast<size_type>( list.size() ); // set the length
 	}
 
 	// Copy Constructor for deep copying
-	myVector(const myVector& vecCopy)
+	vector(const vector& vecCopy)
 	{
 		m_data = new value_type[static_cast<std::size_t>(vecCopy.m_capacity)];
 		
@@ -51,7 +54,7 @@ public:
 	}
 	
 	// Move Constructor
-	myVector(myVector&& vecMove) 
+	vector(vector&& vecMove) 
 	{
 		m_data = vecMove.m_data;	// point to the data
 
@@ -65,13 +68,13 @@ public:
 		vecMove.m_length = 0;
 	}
 
-	~myVector()
+	~vector()
 	{
 		delete[] m_data;	// deallocate memory
 	}
 
 	// Overload the assignment operator for deep copying
-	myVector& operator=(const myVector& vecCopy)
+	vector& operator=(const vector& vecCopy)
 	{
 		// check for self assignment
 		if (this == &vecCopy)
@@ -95,7 +98,7 @@ public:
 	}
 
 	// Overload the assignment operator for deep copying initializer lists
-	myVector& operator=(std::initializer_list<value_type> list)
+	vector& operator=(std::initializer_list<value_type> list)
 	{	
 		std::size_t capacity{ list.size() * 2 };
 
@@ -210,3 +213,5 @@ private:
 	size_type m_capacity{};
 
 };
+
+} // namespace ReImplSTL

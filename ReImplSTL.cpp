@@ -6,7 +6,7 @@
 #include <vector>
 
 template <typename T>
-void printVec(const myVector<T>& vec)
+void printVec(const ReImplSTL::vector<T>& vec)
 {
 	for (int i{}; i < vec.size(); i++) {
 		std::cout << vec[i] << " ";
@@ -17,11 +17,11 @@ void printVec(const myVector<T>& vec)
 
 int main()
 {
-	myVector<int> vec1 (10);
-	myVector<int> vec2 {2,3,4,5,6};
-	myVector<int> vec3 {vec2};
-	myVector<int> vec4 = vec3;
-	myVector vec5 = {2,3,4,2,1,3,4};
+	ReImplSTL::vector<int> vec1 (10);
+	ReImplSTL::vector<int> vec2 {2,3,4,5,6};
+	ReImplSTL::vector<int> vec3 {vec2};
+	ReImplSTL::vector<int> vec4 = vec3;
+	ReImplSTL::vector vec5 = {2,3,4,2,1,3,4};
 	
 	std::cout << "Capacity: " << vec2.capacity() << '\n';
 	printVec(vec2);
