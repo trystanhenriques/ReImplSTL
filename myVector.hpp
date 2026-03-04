@@ -264,6 +264,9 @@ private:
 		for (size_type i{}; i < m_length; i++) {
 			tempData[i] = std::move(m_data[i]);
 		}
+		
+		// deallocate old data
+		delete[] m_data;
 
 		// Point to our new data
 		m_data = tempData;
