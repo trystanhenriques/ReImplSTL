@@ -122,20 +122,26 @@ public:
 		return *this;
 	}
 
-	//// Overload the assignment operator for moving r values
-	//vector& operator=(vector&& rvec)
-	//{	
-	//	// check for self assignment
-	//	if (this == &vecCopy)
-	//		return *this;
+	// Overload the assignment operator for moving r values
+	vector& operator=(vector&& rvec)
+	{	
+		// check for self assignment
+		if (this == &vecCopy)
+			return *this;
+		
+		// Move the resources
+		m_data = rvec.m_data;
+		m_capacity = rvec.m_capacity;
+		m_length = rvec.m_length;
 
-	//	// Check if the rvec has a higher length than the capacity
-	//	if (rvec.m_length >= m_capacity) {
-	//		// We need more memory, allocate new memory equal to the 
-	//		
+		// Set rvec to an invalid state
+		rvec.m_data = nullptr;
+		rvec.m_capacity = 0;
+		rvec.m_length = 0;
 
-	//	}
-	//}
+		// for chaining
+		return *this;
+	}
 	
 	// non-const overload of operator[] for element access
 	reference operator[](int index)
