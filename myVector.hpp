@@ -237,9 +237,16 @@ public:
 	
 	void clear()
 	{
+		// Destroy all the elements inside the vector
+		for (size_type i{}; i < m_length; i++) {
+			m_data[i].~value_type();
+		}
 		
+		// Set the size of vec to 0
+		m_length = 0;
 	}
 	
+
 	void push_back(const_reference element)
 	{
 		// check the capacity

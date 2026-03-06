@@ -8,10 +8,11 @@
 template <typename T>
 void printVec(const ReImplSTL::vector<T>& vec)
 {
+	std::cout << "{";
 	for (int i{}; i < vec.size(); i++) {
 		std::cout << vec[i] << " ";
 	}
-	std::cout << '\n';
+	std::cout << "}\n";
 }
 
 
@@ -25,6 +26,10 @@ int main()
 	
 	vec5.push_back(5);
 	printVec(vec5);
+
+	vec5.clear();
+	printVec(vec5);
+	
 
 	
 }
