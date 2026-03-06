@@ -23,20 +23,8 @@ int main()
 	ReImplSTL::vector<int> vec4 = vec3;
 	ReImplSTL::vector vec5 = {2,3,4,2,1,3,4};
 	
-	std::cout << "Capacity: " << vec2.capacity() << '\n';
-	printVec(vec2);
-
-	vec2.reserve(400);
-	
-
-	std::cout << "Capacity: " << vec2.capacity() << '\n';
-	printVec(vec2);
-
-	vec2.shrink_to_fit();
-
-		
-	std::cout << "Capacity: " << vec2.capacity() << '\n';
-	printVec(vec2);
+	vec5.push_back(5);
+	printVec(vec5);
 
 	
 }

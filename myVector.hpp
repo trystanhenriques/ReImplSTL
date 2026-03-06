@@ -110,13 +110,13 @@ public:
 		delete[] m_data;
 		
 		// allocate new memory based on the size of the list
-		m_data = new value_type[capacity] {};
+		m_data = new value_type[capacity*2] {};
 
 		// deep copy data
 		std::copy_n(list.begin(), static_cast<int>(list.size()), m_data);
 
 		m_length = static_cast<size_type>(list.size());
-		m_capacity =  capacity;
+		m_capacity = capacity;
 
 		// for chaining
 		return *this;
@@ -126,7 +126,7 @@ public:
 	vector& operator=(vector&& rvec)
 	{	
 		// check for self assignment
-		if (this == &vecCopy)
+		if (this == &rvec)
 			return *this;
 		
 		// Move the resources
@@ -229,6 +229,16 @@ public:
 
 	}
 
+
+
+	//  ======================
+	//  Modifiers
+	//  ======================
+	
+	void clear()
+	{
+		
+	}
 	
 	void push_back(const_reference element)
 	{
@@ -236,14 +246,32 @@ public:
 		if (m_length == m_capacity) {
 
 			// Allocate more memory with double the size
-			double_capacity();
+			reallocate();
 		}
 	
-		// copy the element into the new slot
-		m_data[m_length];
+
+		// Copy element to last index
+		m_data[m_length] = element;
 		
-		// Increment the length
-		m_lenght++;
+		// Increment the length to indicate our new element was added
+		m_length++;
+		
+	}
+
+	void push_back(value_type&& r_elem) {
+		
+		// check the capacity
+		if (m_length == m_capacity) {
+
+			// Allocate more memory with double the size
+			reallocate();
+		}
+
+		// move the element into last index
+		m_data[m_length] = std::move(r_elem);
+
+		// Increment the length to indicate our new element was added
+		m_length++;
 	}
 	
 
@@ -258,13 +286,13 @@ private:
 	// ======================
 
 	// Case where the vector runs out of memory and we need to allocate more memory
-	void double_capacity()
+	void reallocate()
 	{
 		// New capacity
 		size_type newCapacity {m_capacity * 2};
 		
 		// allocate double the memory of our past capacity
-		value_type* tempData { new value_type[static_cast<std::size_t(newCapacity)] {} };
+		value_type* tempData { new value_type[static_cast<std::size_t>(newCapacity)] {} };
 
 		// Move / Copy the data over to our newly allocated memory
 		for (size_type i{}; i < m_length; i++) {
