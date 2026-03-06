@@ -70,7 +70,8 @@ public:
 
 	~vector()
 	{
-		delete[] m_data;	// deallocate memory
+		// Free memory
+		deallocate();
 	}
 
 	// Overload the assignment operator for deep copying
@@ -84,7 +85,7 @@ public:
 		if (vecCopy.m_length > m_capacity) {
 			
 			// deallocate old memory
-			delete[] m_data;
+			deallocate();
 
 			// allocate new memory with the same capacity of the copy
 			m_data = new value_type[static_cast<std::size_t>(vecCopy.m_capacity)]{};
@@ -107,7 +108,7 @@ public:
 		std::size_t capacity{ list.size() * 2 };
 
 		// deallocate old memory
-		delete[] m_data;
+		deallocate();
 		
 		// allocate new memory based on the size of the list
 		m_data = new value_type[capacity*2] {};
@@ -147,7 +148,7 @@ public:
 	reference operator[](int index)
 	{
 		// make sure the index is in bounds
-		assert( (index >= 0 && index < m_length) , "Index Out of Bounds" );
+		assert( (index >= 0 && index < m_length) && "Index Out of Bounds" );
 		
 		// Return Element at that index
 		return m_data[static_cast<std::size_t>(index)];
@@ -158,7 +159,7 @@ public:
 	const_reference operator[](int index) const
 	{
 		// make sure the index is in bounds
-		assert(index >= 0 && index < m_length, "Index Out of Bounds");
+		assert((index >= 0 && index < m_length) && "Index Out of Bounds");
 
 		// Return Element at that index
 		return m_data[static_cast<std::size_t>(index)];
@@ -175,7 +176,7 @@ public:
 	
 	bool empty() const
 	{
-		return (m_length > 0);
+		return (m_length == 0);
 	}
 
 	int capacity() const
@@ -198,7 +199,7 @@ public:
 		}
 		
 		// deallocate old data
-		delete[] m_data;
+		deallocate();
 		
 		// point to the new Data
 		m_data = tempData;
@@ -219,7 +220,7 @@ public:
 		}
 		
 		// deallocate old data
-		delete[] m_data;
+		deallocate();
 
 		// point to the new Data
 		m_data = tempData;
@@ -291,6 +292,18 @@ private:
 	// ======================
 	// Helpers
 	// ======================
+	
+	// Frees the memory of the vector and prevents memory leaks
+	void deallocate()
+	{
+		// Call destructors on all the elements in the container from [0, capacity)
+		for (size_type i{}; i < m_capacity; i++) {
+			m_data[i].~value_type();
+		}
+
+		// Deallocate vectors memory
+		delete[] m_data;
+	}
 
 	// Case where the vector runs out of memory and we need to allocate more memory
 	void reallocate()
@@ -307,7 +320,7 @@ private:
 		}
 		
 		// deallocate old data
-		delete[] m_data;
+		deallocate();
 
 		// Point to our new data
 		m_data = tempData;
