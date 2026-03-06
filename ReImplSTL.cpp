@@ -3,14 +3,34 @@
 
 #include <iostream>
 #include "myVector.hpp"
+#include <vector>
+
+template <typename T>
+void printVec(const ReImplSTL::vector<T>& vec)
+{
+	std::cout << "{";
+	for (int i{}; i < vec.size(); i++) {
+		std::cout << vec[i] << " ";
+	}
+	std::cout << "}\n";
+}
+
 
 int main()
 {
-	myVector<int> vec1 (10);
-	myVector<int> vec2 {2,3,4,5,6};
-	myVector<int> vec3 {vec2};
-	myVector<int> vec4 = vec3;
-	myVector<int> vec5 = {2,3,4,2,1,3,4};
+	ReImplSTL::vector<int> vec1 (10);
+	ReImplSTL::vector<int> vec2 {2,3,4,5,6};
+	ReImplSTL::vector<int> vec3 {vec2};
+	ReImplSTL::vector<int> vec4 = vec3;
+	ReImplSTL::vector vec5 = {2,3,4,2,1,3,4};
+	
+	vec5.push_back(5);
+	printVec(vec5);
+
+	vec5.clear();
+	printVec(vec5);
+	
+
 	
 }
 
