@@ -18,6 +18,10 @@ public:
 	using difference_type = std::ptrdiff_t;
 	using reference = value_type&;
 	using const_reference = const value_type&;
+	using pointer = T*;
+	using const_pointer = const T*;
+	using iterator = T*;
+	using const_iteraotr = const T*;
 
 	// Constructors
 	vector()
@@ -163,6 +167,11 @@ public:
 		// Return Element at that index
 		return m_data[static_cast<std::size_t>(index)];
 	}
+
+	//  ======================
+	//  Iterator Methods
+	//  ======================
+	
 	
 	//  ======================
 	//  Capacity
