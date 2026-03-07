@@ -38,6 +38,9 @@ int main()
 	printVec(vec5);
 
 	iteratorTestPrintVec(vec5);
+
+	std::cout << vec5.front();
+	std::cout << vec5.back();
 	
 }
 
