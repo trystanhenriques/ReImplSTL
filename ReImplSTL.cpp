@@ -8,13 +8,23 @@
 template <typename T>
 void printVec(const ReImplSTL::vector<T>& vec)
 {
-	std::cout << "{";
+	std::cout << "{ ";
 	for (int i{}; i < vec.size(); i++) {
 		std::cout << vec[i] << " ";
-	}
+	} 
 	std::cout << "}\n";
 }
 
+template <typename T>
+void iteratorTestPrintVec(const ReImplSTL::vector<T>& vec)
+{
+	std::cout << "{ ";
+	auto it = vec.cbegin();
+	for (;it != vec.cend(); ++it) {
+		std::cout << *it << " ";
+	}
+	std::cout << "}\n";
+}
 
 int main()
 {
@@ -27,10 +37,7 @@ int main()
 	vec5.push_back(5);
 	printVec(vec5);
 
-	vec5.clear();
-	printVec(vec5);
-	
-
+	iteratorTestPrintVec(vec5);
 	
 }
 
