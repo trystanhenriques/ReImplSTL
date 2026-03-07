@@ -18,6 +18,10 @@ public:
 	using difference_type = std::ptrdiff_t;
 	using reference = value_type&;
 	using const_reference = const value_type&;
+	using pointer = T*;
+	using const_pointer = const T*;
+	using iterator = T*;
+	using const_iterator = const T*;
 
 	// Constructors
 	vector()
@@ -164,7 +168,26 @@ public:
 		// Return Element at that index
 		return m_data[static_cast<std::size_t>(index)];
 	}
+
+	//  ======================
+	//  Iterator
+	//  ======================
+
+	iterator begin() {return m_data;}
+	const_iterator cbegin() const {return m_data;}
 	
+	iterator end() {return m_data + (m_length);}			// return a pointer to one past last element
+	const_iterator cend() const {return m_data + (m_length);}	
+
+	// Reverse iterators
+	iterator rbegin() { return m_data + (m_length-1); }	// return a pointer to the last element
+	const_iterator crbegin() const { return m_data + (m_length-1); }
+
+	iterator rend() {return m_data-1;} // return a pointer to (m_data - 1)
+	iterator crend() const { return m_data - 1; }
+	
+
+
 	//  ======================
 	//  Capacity
 	//  ======================
