@@ -170,7 +170,7 @@ public:
 	}
 
 	//  ======================
-	//  Iterator Methods
+	//  Iterator
 	//  ======================
 
 	iterator begin() {return m_data;}
@@ -181,7 +181,7 @@ public:
 
 	// Reverse iterators
 	iterator rbegin() { return m_data + (m_length-1); }	// return a pointer to the last element
-	const_iterator rcbegin() const { return m_data + (m_length-1); }
+	const_iterator crbegin() const { return m_data + (m_length-1); }
 
 	iterator rend() {return m_data-1;} // return a pointer to (m_data - 1)
 	iterator crend() const { return m_data - 1; }
