@@ -5,6 +5,7 @@
 #include <initializer_list>
 #include <algorithm>
 #include <cassert>
+#include <stdexcept>
 
 namespace ReImplSTL
 {
@@ -147,6 +148,10 @@ public:
 		// for chaining
 		return *this;
 	}
+
+	//  ======================
+	//  Element access
+	//  ======================
 	
 	// non-const overload of operator[] for element access
 	reference operator[](int index)
@@ -168,6 +173,76 @@ public:
 		// Return Element at that index
 		return m_data[static_cast<std::size_t>(index)];
 	}
+
+	reference at(int index)
+	{
+		// Out of Bounds! Throw Exception
+		if (index < 0 || index >= m_length) {
+			throw std::out_of_range("Index Out of Bounds");
+		}
+
+		// Return Element at that index
+		return m_data[static_cast<std::size_t>(index)];
+	}
+
+	const_reference at(int index) const
+	{
+		// Out of Bounds! Throw Exception
+		if (index < 0 || index >= m_length) {
+			throw std::out_of_range("Index Out of Bounds");
+		}
+
+		// Return Element at that index
+		return m_data[static_cast<std::size_t>(index)];
+	}
+	
+	// return reference to the front element
+	reference front()
+	{
+		return *m_data;
+	}
+
+	// return const reference to the front element
+	const_reference front() const
+	{
+		return *m_data;
+	}
+
+	// return reference to the last element
+	reference back()
+	{
+		// Vector is empty, UNDEFINED BEHAVIOR: Just return reference to the first element	
+		if (empty()) {
+			return *m_data;
+		}
+		
+		// return reference to last element
+		return m_data[m_length-1];
+	}
+
+	// return const reference to the last element
+	const_reference back() const
+	{
+		// Vector is empty, UNDEFINED BEHAVIOR: Just return reference to the first element	
+		if (empty()) {
+			return *m_data;
+		}
+
+		// retrun reference to last element
+		return m_data[m_length - 1];
+	}
+
+	// return reference to data
+	pointer data()
+	{
+		return m_data;
+	}
+
+	const_pointer data() const
+	{
+		return m_data;
+	}
+	
 
 	//  ======================
 	//  Iterator
