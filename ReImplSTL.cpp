@@ -29,7 +29,7 @@ void iteratorTestPrintVec(const ReImplSTL::vector<T>& vec)
 int main()
 {
 	ReImplSTL::vector<int> vec1 (10);
-	ReImplSTL::vector<int> vec2 {2,3,4,5,6};
+	const ReImplSTL::vector<int> vec2 {2,3,4,5,6};
 	ReImplSTL::vector<int> vec3 {vec2};
 	ReImplSTL::vector<int> vec4 = vec3;
 	ReImplSTL::vector vec5 = {2,3,4,2,1,3,4};
@@ -41,6 +41,7 @@ int main()
 
 	std::cout << vec5.front();
 	std::cout << vec5.back();
+	std::cout << vec2.data()[0];
 	
 }
 

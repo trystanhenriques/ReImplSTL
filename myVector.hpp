@@ -209,6 +209,18 @@ public:
 		return m_data[m_length - 1];
 	}
 
+	// return reference to data
+	pointer data()
+	{
+		return m_data;
+	}
+
+	const_pointer data() const
+	{
+		return m_data;
+	}
+	
+
 	//  ======================
 	//  Iterator
 	//  ======================
