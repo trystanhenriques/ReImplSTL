@@ -42,6 +42,7 @@ int main()
 	std::cout << vec5.front();
 	std::cout << vec5.back();
 	std::cout << vec2.data()[0];
+	std::cout << vec2.at(0);
 	
 }
 

@@ -5,6 +5,7 @@
 #include <initializer_list>
 #include <algorithm>
 #include <cassert>
+#include <stdexcept>
 
 namespace ReImplSTL
 {
@@ -168,6 +169,28 @@ public:
 	{
 		// make sure the index is in bounds
 		assert((index >= 0 && index < m_length) && "Index Out of Bounds");
+
+		// Return Element at that index
+		return m_data[static_cast<std::size_t>(index)];
+	}
+
+	reference at(int index)
+	{
+		// Out of Bounds! Throw Exception
+		if (index < 0 || index >= m_length) {
+			throw std::out_of_range("Index Out of Bounds");
+		}
+
+		// Return Element at that index
+		return m_data[static_cast<std::size_t>(index)];
+	}
+
+	const_reference at(int index) const
+	{
+		// Out of Bounds! Throw Exception
+		if (index < 0 || index >= m_length) {
+			throw std::out_of_range("Index Out of Bounds");
+		}
 
 		// Return Element at that index
 		return m_data[static_cast<std::size_t>(index)];
