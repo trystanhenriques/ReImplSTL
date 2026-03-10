@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <cassert>
 #include <stdexcept>
+#include <iterator>
 
 namespace ReImplSTL
 {
@@ -23,6 +24,8 @@ public:
 	using const_pointer = const T*;
 	using iterator = T*;
 	using const_iterator = const T*;
+	using reverse_iterator = std::reverse_iterator<iterator>;
+	using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
 	// Constructors
 	vector()
