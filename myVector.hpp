@@ -252,17 +252,21 @@ public:
 	//  ======================
 
 	iterator begin() {return m_data;}
+	const_iterator begin() const { return m_data; }
 	const_iterator cbegin() const {return m_data;}
 	
-	iterator end() {return m_data + (m_length);}			// return a pointer to one past last element
+	iterator end() {return m_data + (m_length);}							// return a pointer to one past last element
+	const_iterator end() const { return m_data + (m_length); }
 	const_iterator cend() const {return m_data + (m_length);}	
 
 	// Reverse iterators
-	iterator rbegin() { return m_data + (m_length-1); }	// return a pointer to the last element
-	const_iterator crbegin() const { return m_data + (m_length-1); }
+	reverse_iterator rbegin() { return m_data + (m_length-1); }				// return a pointer to the last element
+	const_reverse_iterator rbegin() const { return m_data + (m_length - 1); }
+	const_reverse_iterator crbegin() const { return m_data + (m_length-1); }
 
-	iterator rend() {return m_data-1;} // return a pointer to (m_data - 1)
-	iterator crend() const { return m_data - 1; }
+	reverse_iterator rend() {return m_data-1;}							// return a pointer to (m_data - 1)
+	const_reverse_iterator rend() const { return m_data - 1; }
+	const_reverse_iterator crend() const { return m_data - 1; }
 	
 
 
