@@ -432,6 +432,50 @@ public:
 		return (begin() + pos);
 	}
 	
+	//move a value into the array at a position 
+	iterator insert(int pos, value_type&& value)
+	{
+		// make sure the index is in bounds
+		assert((pos >= 0 && static_cast<size_type>(pos) < m_length) && "insert index position out of bounds");
+
+		// check the size to see if we need to reallocate
+		if (m_length == m_capacity) {
+
+			// perform reallocation
+			reallocate();
+		}
+
+		// check if the vector is empty. if so put value at index 
+		if (m_length == 0 && pos == 0) {
+			push_back(value);
+			return begin();
+		}
+
+		// Convert pos to reverse iterator.
+		auto stop = std::make_reverse_iterator(begin() + pos);
+
+		// Loop from the last element until position
+		for (auto rit{ rbegin() }; rit != stop; ++rit) {
+
+			// reference to the location to the right of it, so we can shift to the right
+			reference rightposition{ *(rit - 1) };
+
+			// Destruct the element at the right position
+			rightposition.~value_type();
+
+			// move the content at that memory location to its index + 1 (shift to the right)
+			rightposition = std::move(*rit);
+		}
+
+		// At this point, pos should be open to insert a value. Now move the rvalue into m_data[pos]
+		m_data[pos] = std::move(value);
+
+		// Increment the length
+		++m_length;
+
+		// Return an iterator to the position we inserted into
+		return (begin() + pos);
+	}
 
 
 private:
