@@ -30,7 +30,7 @@ public:
 		for (int i{}; i < size; i++) {
 			
 			// Initialize new Node with the value
-			Node* newNode { new Node{ value }};
+			Node* newNode { new Node{ value, nullptr, nullptr }};
 
 			// Set the previous node
 			newNode->prev = lastNode;
@@ -43,7 +43,7 @@ public:
 			// There is only one Make sure that there is more than one node
 			if (m_head != newNode) {
 				// Set the next pointer for the previous node
-				newNode->prev->next = newNode;
+				lastNode->next = newNode;
 			}
 		
 			// This is the most recent node! Set the tail to our new Node
@@ -54,6 +54,60 @@ public:
 			
 			// Set our last node for next iteration
 			lastNode = newNode;
+		}
+	}
+	
+	// Copy Constructor For Deep Copying
+	linkedlist(const linkedlist& listCopy) {
+		
+		// Temporary pointer to keep track of the previous node
+		Node* lastNode{ nullptr };
+		
+		for (Node* tnd{ listCopy.m_head }; tnd != nullptr; tnd = tnd->next) {
+			
+			// Create a new node for our original linkedlist with the same data as the copy.
+			Node* newNode { new Node{tnd->data, nullptr, nullptr} };
+			
+			// Case: First Node, point head to newNode
+			if (m_head == nullptr) {
+				m_head = newNode; 
+			}
+			
+			// make sure there is more than one node
+			
+			if (m_head != newNode) {
+				// Set the previous node's next to our new node
+				lastNode->next = newNode;
+			}
+
+			// Set the previous node
+			newNode->prev = lastNode;
+			
+			// Most recently added Node, make tail point to this node 
+			m_tail = newNode;
+			
+			// Increment the size
+			++m_size;
+			
+			// Set the most recent node
+			lastNode = newNode;
+		}
+	}
+
+	// Destructor
+	~linkedlist() {
+		
+		// Temporary to save a pointer to the next node
+		Node* nextNode { nullptr };
+
+		// Deallocate every node in the linkedlist
+		for (Node* tnd{ m_head }; tnd != nullptr; tnd = nextNode) {
+			
+			// Save the pointer to the next node 
+			nextNode = tnd->next;
+			
+			// Deallocate our current Node
+			delete[] tnd;	
 		}
 	}
 

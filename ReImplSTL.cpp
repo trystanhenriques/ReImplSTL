@@ -32,7 +32,10 @@ void iteratorTestPrintVec(const ReImplSTL::vector<T>& vec)
 
 int main()
 {
-	ReImplSTL::linkedlist<int> list {39, 666};
+	ReImplSTL::linkedlist<int> list {5, 666};
 	list.print();
+		
+	ReImplSTL::linkedlist<int> list2 {list};
+	list2.print();
 }
 
