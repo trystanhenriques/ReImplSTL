@@ -3,8 +3,10 @@
 
 #include <iostream>
 #include <vector>
+#include <memory>
 #include "myVector.hpp"
 #include "LinkedList.hpp"
+
 
 
 template <typename T>
@@ -32,7 +34,13 @@ void iteratorTestPrintVec(const ReImplSTL::vector<T>& vec)
 
 int main()
 {
-	ReImplSTL::linkedlist<int> list {39, 666};
+	ReImplSTL::linkedlist<int> list {5, 666};
 	list.print();
+		
+	ReImplSTL::linkedlist<int> list2 = std::move(list);
+	list2.print();
+
+	list.print();
+
 }
 
