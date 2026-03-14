@@ -2,8 +2,10 @@
 //
 
 #include <iostream>
-#include "myVector.hpp"
 #include <vector>
+#include "myVector.hpp"
+#include "LinkedList.hpp"
+
 
 template <typename T>
 void printVec(const ReImplSTL::vector<T>& vec)
@@ -26,12 +28,11 @@ void iteratorTestPrintVec(const ReImplSTL::vector<T>& vec)
 	std::cout << "}\n";
 }
 
+
+
 int main()
 {
-	ReImplSTL::vector vec5 = {2,3,4,2,1,3,4};
-	printVec(vec5);
-	vec5.insert(1, 666);
-	printVec(vec5);
-	
+	ReImplSTL::linkedlist<int> list {39, 666};
+	list.print();
 }
 
