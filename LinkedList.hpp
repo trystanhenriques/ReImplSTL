@@ -94,6 +94,28 @@ public:
 		}
 	}
 
+	// Move Constructor
+	linkedlist(linkedlist&& rList) {
+
+		// Steal the data that rList has
+		m_head = rList.m_head;
+		m_tail = rList.m_tail;
+		m_size = rList.m_size;
+
+		// Leave the other list in an empty but valid state
+		rList.m_head = nullptr;
+		rList.m_tail = nullptr;
+		rList.m_size = 0;
+	}
+
+	// Destructor
+	~linkedlist() {
+
+		//Deallocates all the nodes in the linked list
+		deallocate();
+	}
+
+
 	// Copy assignment overload for deep copy
 	linkedlist& operator=(const linkedlist& listCopy) {
 		
@@ -141,12 +163,31 @@ public:
 		return *this;
 	}
 
-	// Destructor
-	~linkedlist() {
+	// Overload assignment operator for move semantics
+	linkedlist& operator=(linkedlist** rList) {
 		
-		//Deallocates all the nodes in the linked list
+		// Check for self assignment
+		if (this == &rList) {
+			return &this;
+		}
+
+		// Deallocate the old linkedlist
 		deallocate();
+
+		// Steal the data that rList has
+		m_head = rList.m_head;
+		m_tail = rList.m_tail;
+		m_size = rList.m_size;
+
+		// Leave the other list in an empty but valid state
+		rList.m_head = nullptr;
+		rList.m_tail = nullptr;
+		rList.m_size = 0;
+
+		return *this;
+		
 	}
+
 
 	// Function to print out a linkedlist just for testing
 	void print() const {

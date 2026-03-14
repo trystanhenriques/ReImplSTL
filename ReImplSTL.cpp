@@ -3,8 +3,10 @@
 
 #include <iostream>
 #include <vector>
+#include <memory>
 #include "myVector.hpp"
 #include "LinkedList.hpp"
+
 
 
 template <typename T>
@@ -35,8 +37,10 @@ int main()
 	ReImplSTL::linkedlist<int> list {5, 666};
 	list.print();
 		
-	ReImplSTL::linkedlist<int> list2 = list;
+	ReImplSTL::linkedlist<int> list2 = std::move(list);
 	list2.print();
+
+	list.print();
 
 }
 
