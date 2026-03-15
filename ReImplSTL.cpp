@@ -34,12 +34,7 @@ void iteratorTestPrintVec(const ReImplSTL::vector<T>& vec)
 
 int main()
 {
-	ReImplSTL::linkedlist<int> list {5, 666};
-	list.print();
-		
-	ReImplSTL::linkedlist<int> list2 = std::move(list);
-	list2.print();
-
+	ReImplSTL::linkedlist<int> list {4, 2, 3, 4, 1, 1};
 	list.print();
 
 }
