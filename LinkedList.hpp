@@ -1,6 +1,7 @@
 #include <cstddef>
 #include <iostream>
 #include <initializer_list>
+#include <memory>
 
 namespace ReImplSTL
 {
@@ -319,6 +320,33 @@ public:
 			return;
 		}
 		
+		// Set our old tail's next to point to our new Node
+		m_tail->next = newNode;
+
+		// Set the new Nodes previous to point at the old tail
+		newNode->prev = m_tail;
+
+		// Set the new tail
+		m_tail = newNode;
+
+		// Increase the size to account for new Node
+		++m_size;
+	}
+
+	// Appends a move of value to the end of the container.
+	void push_back(value_type&& rval) {
+
+		// Create New Node to contain our value
+		Node* newNode{ new Node{std::move(rval), nullptr, nullptr} };
+
+		// Case Where the linked list is empty
+		if (empty()) {
+			m_head = newNode;
+			m_tail = newNode;
+			++m_size;
+			return;
+		}
+
 		// Set our old tail's next to point to our new Node
 		m_tail->next = newNode;
 
