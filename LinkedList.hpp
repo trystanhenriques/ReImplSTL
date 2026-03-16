@@ -282,6 +282,25 @@ public:
 		std::cout << "}\n";
 	}
 
+	// =========================
+	// Element Access
+	// =========================
+	reference front() { return *m_head; }
+	const_reference front() const { return *m_head; }
+	reference back() { return *m_tail; }
+	const_reference back() const { return *m_head; }
+
+	// =========================
+	// Capacity
+	// =========================
+	bool empty() const {
+		return !m_size;
+	}
+	
+	int size() {
+		return static_cast<int>(m_size);
+	}
+
 private:
 	//  Inner Node Class
 	struct Node {
