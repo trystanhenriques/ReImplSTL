@@ -360,6 +360,33 @@ public:
 		++m_size;
 	}
 	
+	// Prepends a copy of value to the beginning of the container.
+	void push_front(const_reference val) {
+		
+		// Create new Node
+		Node* newNode { new Node {val, nullptr, nullptr} };
+		
+		// if empty, set head and tail to new Node
+		if (empty()) {
+			m_head = newNode;
+			m_tail = newNode;
+			++m_size;	
+		}
+
+		// Make the previous head point to the new Node
+		m_head->prev = newNode;
+
+		// Set the newNodes next to point at the old head
+		newNode->next = m_head;
+
+		// Set the new head
+		m_head = newNode;
+
+		// Increase size
+		++m_size;	
+	}
+
+	
 	// Removes the last element of the container.
 	void pop_back() {
 		
