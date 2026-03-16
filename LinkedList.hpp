@@ -359,6 +359,39 @@ public:
 		// Increase the size to account for new Node
 		++m_size;
 	}
+	
+	// Removes the last element of the container.
+	void pop_back() {
+		
+		// Check if linked list is empty. IF so, Return
+		if (empty()) {
+			return;
+		}
+	
+		// Check if there is only one node in the linkedlist
+		if (m_size == 1) {
+			delete m_head;
+			m_head = nullptr;
+			m_tail == nullptr;
+			--m_size;
+			return;
+		}
+		
+		// Get a pointer to the Node before m_tail
+		Node* prevNode {m_tail->prev};
+		
+		// Deallocate the node
+		delete m_tail;
+
+		// Make Previous Node -> next point to nulltptr
+		prevNode->next = nullptr;
+		
+		// Set m_tail to the previous node
+		m_tail = prevNode;
+
+		// Dec size
+		--m_size;
+	}
 
 private:
 	//  Inner Node Class

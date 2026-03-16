@@ -37,7 +37,7 @@ int main()
 	ReImplSTL::linkedlist<int> list {4, 2, 3, 4, 1, 1};
 	list.print();
 
-	list.push_back(3232);
+	list.pop_back();
 	list.print();
 
 }
