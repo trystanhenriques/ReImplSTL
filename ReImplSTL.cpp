@@ -37,5 +37,8 @@ int main()
 	ReImplSTL::linkedlist<int> list {4, 2, 3, 4, 1, 1};
 	list.print();
 
+	list = {1, 5, 2, 1, 2, 5};
+	list.print();
+
 }
 

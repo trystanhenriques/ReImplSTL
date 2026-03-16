@@ -225,6 +225,48 @@ public:
 		
 	}
 
+	// Overload assignment operator for initializer list
+	linkedlist& operator=(std::initializer_list<value_type> iList) {
+		
+		// Deallocate old linked list and put in empty state
+		deallocate();
+
+		// Temporary pointer to keep track of the previous node
+		Node* lastNode{ nullptr };
+
+		// Iterate through the initializer list using iterator
+		for (auto it{ iList.begin() }; it != iList.end(); ++it) {
+
+			// Create new Node 
+			Node* newNode{ new Node{*it, nullptr, nullptr} };
+
+			// First Node! Set head
+			if (m_head == nullptr) {
+				m_head = newNode;
+			}
+
+			// make sure there is more than one node
+			if (m_head != newNode) {
+				// Set the previous node's next to our new node
+				lastNode->next = newNode;
+			}
+
+			// Set our previous node
+			newNode->prev = lastNode;
+
+			// Most recent Node so Set the Tail
+			m_tail = newNode;
+
+			// Set Most Recent Node for next iteration
+			lastNode = newNode;
+
+			// Increment the size
+			++m_size;
+		}
+
+		return *this;
+
+	}
 
 	// Function to print out a linkedlist just for testing
 	void print() const {
