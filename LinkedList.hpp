@@ -301,6 +301,37 @@ public:
 		return static_cast<int>(m_size);
 	}
 
+	// =========================
+	// Modifiers
+	// =========================
+	
+	// Appends a copy of value to the end of the container.
+	void push_back(const_reference val) {
+
+		// Create New Node to contain our value
+		Node* newNode { new Node{val, nullptr, nullptr} };
+
+		// Case Where the linked list is empty
+		if (empty()) {
+			m_head = newNode;
+			m_tail = newNode;
+			++m_size;
+			return;
+		}
+		
+		// Set our old tail's next to point to our new Node
+		m_tail->next = newNode;
+
+		// Set the new Nodes previous to point at the old tail
+		newNode->prev = m_tail;
+
+		// Set the new tail
+		m_tail = newNode;
+
+		// Increase the size to account for new Node
+		++m_size;
+	}
+
 private:
 	//  Inner Node Class
 	struct Node {
