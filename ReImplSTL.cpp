@@ -40,5 +40,8 @@ int main()
 	list.push_front(222);
 	list.print();
 
+	list.pop_front();
+	list.print();
+
 }
 

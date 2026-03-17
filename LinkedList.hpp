@@ -5,7 +5,6 @@
 
 namespace ReImplSTL
 {
-
 template <typename T>
 class linkedlist {
 public:
@@ -445,6 +444,39 @@ public:
 		// Dec size
 		--m_size;
 	}
+
+	void pop_front() {
+		
+		// Check if the list is empty, if so, return early
+		if (empty()) {
+			return;
+		}
+
+		// Case where there is only one element
+		if (m_size == 1) {
+			delete m_head;
+			m_head = nullptr;
+			m_tail = nullptr;
+			--m_size;
+			return;
+		}
+	
+		// Save the pointer to the next element
+		Node* nextNode {m_head->next};
+
+		// Deallocate the data at head 
+		delete m_head;
+	
+		// Remove the link to the old head
+		nextNode->prev = nullptr;
+
+		// Set the new head
+		m_head = nextNode;
+		
+		// dec the size
+		--m_size;
+	}
+
 
 private:
 	//  Inner Node Class
