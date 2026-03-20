@@ -1,10 +1,10 @@
 #include <cstddef>
 #include <iostream>
 #include <initializer_list>
+#include <memory>
 
 namespace ReImplSTL
 {
-
 template <typename T>
 class linkedlist {
 public:
@@ -300,6 +300,356 @@ public:
 	int size() {
 		return static_cast<int>(m_size);
 	}
+
+	// =========================
+	// Modifiers
+	// =========================
+	
+	// Appends a copy of value to the end of the container.
+	void push_back(const_reference val) {
+
+		// Create New Node to contain our value
+		Node* newNode { new Node{val, nullptr, nullptr} };
+
+		// Case Where the linked list is empty
+		if (empty()) {
+			m_head = newNode;
+			m_tail = newNode;
+			++m_size;
+			return;
+		}
+		
+		// Set our old tail's next to point to our new Node
+		m_tail->next = newNode;
+
+		// Set the new Nodes previous to point at the old tail
+		newNode->prev = m_tail;
+
+		// Set the new tail
+		m_tail = newNode;
+
+		// Increase the size to account for new Node
+		++m_size;
+	}
+
+	// Appends a move of value to the end of the container.
+	void push_back(value_type&& rval) {
+
+		// Create New Node to contain our value
+		Node* newNode{ new Node{std::move(rval), nullptr, nullptr} };
+
+		// Case Where the linked list is empty
+		if (empty()) {
+			m_head = newNode;
+			m_tail = newNode;
+			++m_size;
+			return;
+		}
+
+		// Set our old tail's next to point to our new Node
+		m_tail->next = newNode;
+
+		// Set the new Nodes previous to point at the old tail
+		newNode->prev = m_tail;
+
+		// Set the new tail
+		m_tail = newNode;
+
+		// Increase the size to account for new Node
+		++m_size;
+	}
+	
+	// Prepends a copy of value to the beginning of the container.
+	void push_front(const_reference val) {
+		
+		// Create new Node
+		Node* newNode { new Node {val, nullptr, nullptr} };
+		
+		// if empty, set head and tail to new Node
+		if (empty()) {
+			m_head = newNode;
+			m_tail = newNode;
+			++m_size;	
+		}
+
+		// Make the previous head point to the new Node
+		m_head->prev = newNode;
+
+		// Set the newNodes next to point at the old head
+		newNode->next = m_head;
+
+		// Set the new head
+		m_head = newNode;
+
+		// Increase size
+		++m_size;	
+	}
+
+	// Prepends a move of value to the beginning of the container.
+	void push_front(value_type&& rval) {
+
+		// Create new Node
+		Node* newNode{ new Node {std::move(rval), nullptr, nullptr} };
+
+		// if empty, set head and tail to new Node
+		if (empty()) {
+			m_head = newNode;
+			m_tail = newNode;
+			++m_size;
+		}
+
+		// Make the previous head point to the new Node
+		m_head->prev = newNode;
+
+		// Set the newNodes next to point at the old head
+		newNode->next = m_head;
+
+		// Set the new head
+		m_head = newNode;
+
+		// Increase size
+		++m_size;
+	}
+
+	
+	// Removes the last element of the container.
+	void pop_back() {
+		
+		// Check if linked list is empty. IF so, Return
+		if (empty()) {
+			return;
+		}
+	
+		// Check if there is only one node in the linkedlist
+		if (m_size == 1) {
+			delete m_head;
+			m_head = nullptr;
+			m_tail == nullptr;
+			--m_size;
+			return;
+		}
+		
+		// Get a pointer to the Node before m_tail
+		Node* prevNode {m_tail->prev};
+		
+		// Deallocate the node
+		delete m_tail;
+
+		// Make Previous Node -> next point to nulltptr
+		prevNode->next = nullptr;
+		
+		// Set m_tail to the previous node
+		m_tail = prevNode;
+
+		// Dec size
+		--m_size;
+	}
+
+	void pop_front() {
+		
+		// Check if the list is empty, if so, return early
+		if (empty()) {
+			return;
+		}
+
+		// Case where there is only one element
+		if (m_size == 1) {
+			delete m_head;
+			m_head = nullptr;
+			m_tail = nullptr;
+			--m_size;
+			return;
+		}
+	
+		// Save the pointer to the next element
+		Node* nextNode {m_head->next};
+
+		// Deallocate the data at head 
+		delete m_head;
+	
+		// Remove the link to the old head
+		nextNode->prev = nullptr;
+
+		// Set the new head
+		m_head = nextNode;
+		
+		// dec the size
+		--m_size;
+	}
+	
+	// Resizes the container to contain newSize elements:
+	void resize(size_type newSize) {
+		
+		// Check if the newSize is 0, if so , deallocate all the nodes and return
+		if (newSize == 0) {
+			deallocate();
+			return;
+		}
+		// Check if newSize is equal to current size, if so, do nothing
+		else if (m_size == newSize) {
+			return;
+		}
+		// Case where the newSize is greater than the size: Allocate more nodes!
+		else if (newSize > m_size) {
+
+			// Start tracker node at tail
+			Node* tnd {m_tail};
+			
+			// Find the difference between newSize and m_size
+			size_type num_nodes_to_add { newSize - m_size };	// Disclaimer, we DONT need to use std::ptrdiff_t here because we explicity checked if newSize > m_size 
+			
+			// Pointer for the new Node
+			Node* newNode {};
+			
+			for (size_type i{}; i < num_nodes_to_add; ++i) {
+				
+				// save pointer to the previous tail
+				Node* oldTail {m_tail};
+
+				// Allocate the new node with default data
+				newNode = new Node {};
+
+				// Set the new tail to the new Node
+				m_tail = newNode;
+
+				// Set the head as well if the linkedlist was empty
+				if (empty()) {
+					m_head = newNode;
+				}
+				
+				// Make sure the old tail was not null. An example of this occures when the linked list was empty before this
+				if (oldTail != nullptr) {
+					oldTail->next = newNode;
+				}
+				
+				// Set the previous for the new Node
+				newNode->prev = oldTail;
+	
+				// inc the size
+				++m_size;
+			}
+		}
+		// Case where the newSize is smaller than the current size: Deallocate nodes!
+		else if (newSize < m_size) {
+			
+			// Set Tracker Node to point to the (newSize) Node
+			Node* tnd{ m_head };
+			for (size_type i{}; i < newSize; ++i) {
+				tnd = tnd->next;
+			}
+
+			// Set new tail
+			m_tail = tnd->prev;	// We are doing tnd->prev here because tnd is currently at (m_size) node, so we need to go back one node. We are goint to deallocate from [list[newsize], list[oldSize)
+
+			// Poitner to save pointer to the next node
+			Node* nextNode { nullptr };
+
+			// Deallocate all the nodes from [newSize, m_size)
+			// Reminder that tnd is currently at the (newSize) node, so we are deallocating from tnd to the end of the list
+			for (; tnd != nullptr; tnd = nextNode) {
+				
+				// Save pointer to the next node
+				nextNode = tnd->next;
+
+				// Deallocte node
+				delete tnd;
+
+				// decrease the size
+				--m_size;
+			}
+			
+			// Make sure the new tail isnt pointing to deallocated memory
+			m_tail->next = nullptr;
+		}	
+	}
+
+	// Resizes the container to contain newSize elements:
+	void resize(size_type newSize, const_reference val) {
+
+		// Check if the newSize is 0, if so , deallocate all the nodes and return
+		if (newSize == 0) {
+			deallocate();
+			return;
+		}
+		// Check if newSize is equal to current size, if so, do nothing
+		else if (m_size == newSize) {
+			return;
+		}
+		// Case where the newSize is greater than the size: Allocate more nodes!
+		else if (newSize > m_size) {
+
+			// Start tracker node at tail
+			Node* tnd{ m_tail };
+
+			// Find the difference between newSize and m_size
+			size_type num_nodes_to_add{ newSize - m_size };	// Disclaimer, we DONT need to use std::ptrdiff_t here because we explicity checked if newSize > m_size 
+
+			// Pointer for the new Node
+			Node* newNode{};
+
+			for (size_type i{}; i < num_nodes_to_add; ++i) {
+
+				// save pointer to the previous tail
+				Node* oldTail{ m_tail };
+
+				// Allocate new Node with the value
+				newNode = new Node{val, nullptr, nullptr};
+
+				// Set the new tail to the new Node
+				m_tail = newNode;
+
+				// Set the head as well if the linkedlist was empty
+				if (empty()) {
+					m_head = newNode;
+				}
+
+				// Make sure the old tail was not null. An example of this occures when the linked list was empty before this
+				if (oldTail != nullptr) {
+					oldTail->next = newNode;
+				}
+
+				// Set the previous for the new Node
+				newNode->prev = oldTail;
+
+				// inc the size
+				++m_size;
+			}
+		}
+		// Case where the newSize is smaller than the current size: Deallocate nodes!
+		else if (newSize < m_size) {
+
+			// Set Tracker Node to point to the (newSize) Node
+			Node* tnd{ m_head };
+			for (size_type i{}; i < newSize; ++i) {
+				tnd = tnd->next;
+			}
+
+			// Set new tail
+			m_tail = tnd->prev;	// We are doing tnd->prev here because tnd is currently at (m_size) node, so we need to go back one node. We are goint to deallocate from [list[newsize], list[oldSize)
+
+			// Poitner to save pointer to the next node
+			Node* nextNode{ nullptr };
+
+			// Deallocate all the nodes from [newSize, m_size)
+			// Reminder that tnd is currently at the (newSize) node, so we are deallocating from tnd to the end of the list
+			for (; tnd != nullptr; tnd = nextNode) {
+
+				// Save pointer to the next node
+				nextNode = tnd->next;
+
+				// Deallocte node
+				delete tnd;
+
+				// decrease the size
+				--m_size;
+			}
+
+			// Make sure the new tail isnt pointing to deallocated memory
+			m_tail->next = nullptr;
+		}
+	}
+	
+	
 
 private:
 	//  Inner Node Class
