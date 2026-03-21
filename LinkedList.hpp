@@ -2,11 +2,13 @@
 #include <iostream>
 #include <initializer_list>
 #include <memory>
+#include <iterator>
 
 namespace ReImplSTL
 {
 template <typename T>
 class linkedlist {
+
 public:
 	using value_type = T;
 	using size_type = std::size_t;
@@ -15,8 +17,32 @@ public:
 	using const_reference = const value_type&;
 	using pointer = T*;
 	using const_pointer = const T*;
-	
+
+
+private:
+	//  Inner Node Class
+	struct Node {
+		value_type data{};
+		Node* next{};	// pointer to the next node
+		Node* prev{}; // pointer to the previous node
+	};
+
+	Node* m_head{};
+	Node* m_tail{};
+	size_type m_size{};
+
+
+public:
 	struct iterator {
+
+		using value_type = linkedlist::value_type;
+		using size_type = linkedlist::size_type;
+		using difference_type = linkedlist::difference_type;
+		using reference = linkedlist::reference;
+		using const_reference = linkedlist::const_reference;;
+		using pointer = linkedlist::pointer;
+		using iterator_category = std::bidirectional_iterator_tag;
+
 
 		Node* tnd{};	// Pointer to a node
 
@@ -61,6 +87,14 @@ public:
 	};
 
 	struct const_iterator {
+
+		using value_type = linkedlist::value_type;
+		using size_type = linkedlist::size_type;
+		using difference_type = linkedlist::difference_type;
+		using reference = linkedlist::reference;
+		using const_reference = linkedlist::const_reference;;
+		using pointer = linkedlist::pointer;
+		using iterator_category = std::bidirectional_iterator_tag;
 
 		const Node* tnd{};	// Pointer to a node
 
@@ -109,9 +143,10 @@ public:
 		bool operator!=(const const_iterator& o) const { return tnd != o.tnd; }
 
 	};
-
-
-
+	
+	// Reverse iterators
+	using reverse_iterator = std::reverse_iterator<iterator>;
+	using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
 
 	// Default Constructor
@@ -749,18 +784,8 @@ public:
 	
 	
 
+// Helpers
 private:
-	//  Inner Node Class
-	struct Node {
-		value_type data {};
-		Node* next {};	// pointer to the next node
-		Node* prev {}; // pointer to the previous node
-	};
-
-	Node* m_head {};
-	Node* m_tail {};
-	size_type m_size {};
-
 	// Deallocates all the nodes in the linked list and leave the linkedlist in an empty state
 	void deallocate() {
 
