@@ -48,7 +48,7 @@ public:
 		}
 
 		// Postfix ++
-		iterator operator==(int) {
+		iterator operator--(int) {
 			iterator old{ *this };	// Save copy of the old iterator
 			tnd = tnd->prev;
 			return old;	// Return copy of the old iterator
