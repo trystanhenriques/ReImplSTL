@@ -16,6 +16,104 @@ public:
 	using pointer = T*;
 	using const_pointer = const T*;
 	
+	struct iterator {
+
+		Node* tnd{};	// Pointer to a node
+
+		reference operator*() {
+			return tnd->data;
+		}
+
+		pointer operator->() {
+			return &tnd->data;
+		}
+
+		// Prefix ++
+		iterator& operator++() {
+			tnd = tnd->next;
+			return *this;
+		}
+
+		// Postfix ++
+		iterator operator++(int) {
+			iterator old{ *this }; // Copy old state
+			tnd = tnd->next;
+			return old;	// Return the copy of the old state
+		}
+
+		// Prefix ==
+		iterator& operator--() {
+			tnd = tnd->prev;
+			return *this;
+		}
+
+		// Postfix ++
+		iterator operator==(int) {
+			iterator old{ *this };	// Save copy of the old iterator
+			tnd = tnd->prev;
+			return old;	// Return copy of the old iterator
+		}
+
+		// Comparison operators
+		bool operator==(const iterator& o) const { return tnd == o.tnd; }
+		bool operator!=(const iterator& o) const { return tnd != o.tnd; }
+
+	};
+
+	struct const_iterator {
+
+		const Node* tnd{};	// Pointer to a node
+
+		const_reference operator*() const {
+			return tnd->data;
+		}
+
+		const_pointer operator->() const {
+			return &tnd->data;
+		}
+
+		// Prefix ++
+		const_iterator& operator++() {
+			tnd = tnd->next;
+			return *this;
+		}
+
+		// Postfix ++
+		const_iterator operator++(int) {
+			iterator old{ *this }; // Copy old state
+			tnd = tnd->next;
+			return old;	// Return the copy of the old state
+		}
+
+		// Prefix ==
+		const_iterator& operator--() {
+			tnd = tnd->prev;
+			return *this;
+		}
+
+		// Postfix ++
+		const_iterator operator--(int) {
+			iterator old{ *this };	// Save copy of the old iterator
+			tnd = tnd->prev;
+			return old;	// Return copy of the old iterator
+		}
+
+		// Implicit conversion from non-const iterator
+		const_iterator(const iterator& other)
+			: tnd{ other.tnd }
+		{
+		}
+
+		// Comparison operators
+		bool operator==(const const_iterator& o) const { return tnd == o.tnd; }
+		bool operator!=(const const_iterator& o) const { return tnd != o.tnd; }
+
+	};
+
+
+
+
+
 	// Default Constructor
 	linkedlist() 
 	: m_head {nullptr}, m_tail {nullptr}, m_size {0}
