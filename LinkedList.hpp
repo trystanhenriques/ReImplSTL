@@ -2,11 +2,13 @@
 #include <iostream>
 #include <initializer_list>
 #include <memory>
+#include <iterator>
 
 namespace ReImplSTL
 {
 template <typename T>
 class linkedlist {
+
 public:
 	using value_type = T;
 	using size_type = std::size_t;
@@ -15,7 +17,22 @@ public:
 	using const_reference = const value_type&;
 	using pointer = T*;
 	using const_pointer = const T*;
-	
+
+
+private:
+	//  Inner Node Class
+	struct Node {
+		value_type data{};
+		Node* next{};	// pointer to the next node
+		Node* prev{}; // pointer to the previous node
+	};
+
+	Node* m_head{};
+	Node* m_tail{};
+	size_type m_size{};
+
+
+public:
 	// Default Constructor
 	linkedlist() 
 	: m_head {nullptr}, m_tail {nullptr}, m_size {0}
@@ -268,19 +285,146 @@ public:
 
 	}
 
-	// Function to print out a linkedlist just for testing
-	void print() const {
-		
-		std::cout << "{ ";
-		// Start at head and loop until last node
-		for (Node* tnd{ m_head }; tnd != nullptr; tnd = tnd->next) {
-			
-			// print the data at tnd
-			std::cout << tnd->data << " ";
+	
+	// =========================
+	// Iterators
+	// =========================
+
+	struct iterator {
+
+		using value_type = linkedlist::value_type;
+		using size_type = linkedlist::size_type;
+		using difference_type = linkedlist::difference_type;
+		using reference = linkedlist::reference;
+		using const_reference = linkedlist::const_reference;;
+		using pointer = linkedlist::pointer;
+		using iterator_category = std::bidirectional_iterator_tag;
+
+
+		Node* tnd{};	// Pointer to a node
+
+		reference operator*() {
+			return tnd->data;
 		}
 
-		std::cout << "}\n";
-	}
+		pointer operator->() {
+			return &tnd->data;
+		}
+
+		// Prefix ++
+		iterator& operator++() {
+			tnd = tnd->next;
+			return *this;
+		}
+
+		// Postfix ++
+		iterator operator++(int) {
+			iterator old{ *this }; // Copy old state
+			tnd = tnd->next;
+			return old;	// Return the copy of the old state
+		}
+
+		// Prefix ==
+		iterator& operator--() {
+			tnd = tnd->prev;
+			return *this;
+		}
+
+		// Postfix ++
+		iterator operator--(int) {
+			iterator old{ *this };	// Save copy of the old iterator
+			tnd = tnd->prev;
+			return old;	// Return copy of the old iterator
+		}
+
+		// Comparison operators
+		bool operator==(const iterator& o) const { return tnd == o.tnd; }
+		bool operator!=(const iterator& o) const { return tnd != o.tnd; }
+
+	};
+
+	struct const_iterator {
+
+		using value_type = linkedlist::value_type;
+		using size_type = linkedlist::size_type;
+		using difference_type = linkedlist::difference_type;
+		using reference = linkedlist::reference;
+		using const_reference = linkedlist::const_reference;;
+		using pointer = linkedlist::pointer;
+		using iterator_category = std::bidirectional_iterator_tag;
+
+		const Node* tnd{};	// Pointer to a node
+
+		const_reference operator*() const {
+			return tnd->data;
+		}
+
+		const_pointer operator->() const {
+			return &tnd->data;
+		}
+
+		// Prefix ++
+		const_iterator& operator++() {
+			tnd = tnd->next;
+			return *this;
+		}
+
+		// Postfix ++
+		const_iterator operator++(int) {
+			iterator old{ *this }; // Copy old state
+			tnd = tnd->next;
+			return old;	// Return the copy of the old state
+		}
+
+		// Prefix ==
+		const_iterator& operator--() {
+			tnd = tnd->prev;
+			return *this;
+		}
+
+		// Postfix ++
+		const_iterator operator--(int) {
+			iterator old{ *this };	// Save copy of the old iterator
+			tnd = tnd->prev;
+			return old;	// Return copy of the old iterator
+		}
+
+		// Implicit conversion from non-const iterator
+		const_iterator(const iterator& other)
+			: tnd{ other.tnd }
+		{
+		}
+
+		// Comparison operators
+		bool operator==(const const_iterator& o) const { return tnd == o.tnd; }
+		bool operator!=(const const_iterator& o) const { return tnd != o.tnd; }
+
+	};
+
+	// Reverse iterators
+	using reverse_iterator = std::reverse_iterator<iterator>;
+	using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+
+	// =========================
+	// Iterator Methods
+	// =========================
+
+	iterator begin() { return iterator{ m_head }; }
+	const_iterator begin() const {return iterator{m_head}; }
+	const_iterator cbegin() const { return const_iterator{ m_head }; }
+	
+	iterator end() { return iterator{ nullptr }; }	// Make end point to nullptr because that is the node after the tail	
+	const_iterator end() const { return iterator {nullptr}; }
+	const_iterator cend() const { return const_iterator{ nullptr }; }
+	
+	iterator rbegin() { return std::make_reverse_iterator(begin()); }
+	const_iterator rbegin() const { return std::make_reverse_iterator(cbegin()); }
+	const_iterator crbegin() const { return std::make_reverse_iterator(cbegin()); }
+	
+	iterator rend() { return std::make_reverse_iterator(end()); }
+	const_iterator rend() const { return std::make_reverse_iterator(cend()); }
+	const_iterator crend() const {return std::make_reverse_iterator(cend()); }
+	
 
 	// =========================
 	// Element Access
@@ -651,18 +795,8 @@ public:
 	
 	
 
+// Helpers
 private:
-	//  Inner Node Class
-	struct Node {
-		value_type data {};
-		Node* next {};	// pointer to the next node
-		Node* prev {}; // pointer to the previous node
-	};
-
-	Node* m_head {};
-	Node* m_tail {};
-	size_type m_size {};
-
 	// Deallocates all the nodes in the linked list and leave the linkedlist in an empty state
 	void deallocate() {
 

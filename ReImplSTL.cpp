@@ -7,38 +7,25 @@
 #include "myVector.hpp"
 #include "LinkedList.hpp"
 
-
-
-template <typename T>
-void printVec(const ReImplSTL::vector<T>& vec)
-{
+template<typename T>
+void printList(const ReImplSTL::linkedlist<T>& list) {
+	
 	std::cout << "{ ";
-	for (int i{}; i < vec.size(); i++) {
-		std::cout << vec[i] << " ";
-	} 
-	std::cout << "}\n";
-}
-
-template <typename T>
-void iteratorTestPrintVec(const ReImplSTL::vector<T>& vec)
-{
-	std::cout << "{ ";
-	auto it = vec.cbegin();
-	for (;it != vec.cend(); ++it) {
-		std::cout << *it << " ";
+	for (auto it{ list.begin() }; it != list.end(); ++it) {
+		std::cout << *it << ' ';
 	}
+	
 	std::cout << "}\n";
 }
-
 
 
 int main()
 {
 	ReImplSTL::linkedlist<int> list {4, 2, 3, 4, 1, 1};
-	list.print();
+	printList(list);
 
 	list.resize(29, 222);
-	list.print();
+	printList(list);
 
 }
 
