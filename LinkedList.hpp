@@ -828,6 +828,43 @@ public:
 		return iterator(newNode);
 		
 	}
+
+	
+	// Inserts elements (move) at the specified location in the container.
+	iterator insert(const_iterator pos, value_type&& value) {
+
+		// Get the node that is contained inside the pos iterator
+		Node* nodeAtPos{ const_cast<Node*>(pos.tnd) };
+
+		// Allocate new node
+		Node* newNode{ new Node{std::move(value), nullptr, nullptr}};
+
+		// Case where the position is the tail. Input New Node to the right of the old node at pos
+		if (nodeAtPos == m_tail) {
+			newNode->prev = nodeAtPos;
+			nodeAtPos->next = newNode;
+			m_tail = newNode;
+		}
+		// Case where the position is the head. Input New Node to the left of the old node at pos
+		else if (nodeAtPos == m_head) {
+			newNode->next = nodeAtPos;
+			nodeAtPos->prev = newNode;
+			m_head = newNode;
+		}
+		// Case where the iterator is not pointing to the head or the tail
+		else {
+			newNode->next = nodeAtPos;
+			newNode->prev = nodeAtPos->prev;
+			nodeAtPos->prev->next = newNode;
+			nodeAtPos->prev = newNode;
+		}
+
+		++m_size;
+
+		return iterator(newNode);
+
+	}
+
 	
 	
 
